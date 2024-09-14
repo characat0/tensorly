@@ -165,6 +165,9 @@ class NumpySparseBackend(Backend, backend_name="numpy.sparse"):
             U, S, V = U[:, ::-1], S[::-1], V[:, ::-1]
         return U, S, V.T.conj()
 
+    def svd(self, matrix, k=None):
+        return scipy.sparse.linalg.svds(matrix, k=k)
+
 
 for name in [
     "int64",
@@ -187,6 +190,7 @@ for name in [
     "arange",
     "conj",
     "shape",
+    "argmax",
 ]:
     NumpySparseBackend.register_method(name, getattr(np, name))
 

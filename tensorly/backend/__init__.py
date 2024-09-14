@@ -125,6 +125,7 @@ class BackendManager(types.ModuleType):
         "cupy",
         "jax",
         "paddle",
+        "numpy.sparse",
     ]
     _default_backend = "numpy"
     _loaded_backends = dict()

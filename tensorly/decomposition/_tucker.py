@@ -429,9 +429,8 @@ def non_negative_tucker(
         denominator = tl.clip(denominator, a_min=epsilon, a_max=None)
         nn_core *= numerator / denominator
 
-        rec_error = (
-            tl.norm(tensor - tucker_to_tensor((nn_core, nn_factors)), 2) / norm_tensor
-        )
+        # Assuming the factors are orthonormal and therefore do not affect the reconstructed tensor's norm
+        rec_error = sqrt(tl.abs(norm_tensor**2 - tl.norm(nn_core, 2) ** 2)) / norm_tensor
         rec_errors.append(rec_error)
         if iteration > 1 and verbose:
             print(

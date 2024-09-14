@@ -1,4 +1,7 @@
 import warnings
+
+import sparse
+
 import tensorly as tl
 from .proximal import soft_thresholding
 
@@ -228,7 +231,12 @@ def truncated_svd(matrix, n_eigenvecs=None, **kwargs):
     """
     n_eigenvecs, min_dim, _ = svd_checks(matrix, n_eigenvecs=n_eigenvecs)
     full_matrices = True if n_eigenvecs > min_dim else False
-    U, S, V = tl.svd(matrix, full_matrices=full_matrices)
+    print(f"Calling svd with n_eigenvecs={n_eigenvecs}, full_matrices={full_matrices}")
+    if isinstance(matrix, sparse.SparseArray):
+        with tl.backend_context('numpy.sparse'):
+            U, S, V = tl.svd(matrix, k=n_eigenvecs)
+    else:
+        U, S, V = tl.svd(matrix, full_matrices=full_matrices)
     return U[:, :n_eigenvecs], S[:n_eigenvecs], V[:n_eigenvecs, :]
 
 
